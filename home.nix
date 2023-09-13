@@ -1,6 +1,15 @@
 { config, pkgs, ... }:
 
 {
+  nixpkgs = {
+    config = {
+      allowUnfree = true;
+      allowUnfreePredicate = (_: true);
+    };
+  };
+
+  imports = [ ./neovim.nix ];
+
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
   home.username = "alxarch";
@@ -67,4 +76,20 @@
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
+
+
+  programs.bash = {
+    enable = true;
+  };
+  programs.starship = {
+    enable = true;
+    enableBashIntegration = true;
+  };
+  programs.git = {
+    enable = true;
+    package = pkgs.gitAndtools.gitFull;
+    userEmail = "alexandros.sigalas@gmail.com";
+    userName = "Alexandros Sigalas";
+  };
+
 }
