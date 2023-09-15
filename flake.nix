@@ -8,19 +8,38 @@
       url = "github:nix-community/home-manager/release-23.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixgl = {
+      url = "github:guibou/nixGL";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
   };
 
-  outputs = { nixpkgs, home-manager, ... }:
+  outputs = { nixpkgs, home-manager, nixpkgs-unstable, nixgl, ... }:
     let
       system = "x86_64-linux";
-      pkgs = nixpkgs.legacyPackages.${system};
-    in {
+      unstableOverlay = final: prev: {
+        unstable = import nixpkgs-unstable {
+          inherit system;
+          config.allowUnfree = true;
+        };
+      };
+      pkgs = import nixpkgs {
+        inherit system;
+        overlays = [unstableOverlay nixgl.overlay ];
+        config.allowUnfree = true;
+      };
+    in
+    {
       homeConfigurations."alxarch" = home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
 
         # Specify your home configuration modules here, for example,
         # the path to your home.nix.
-        modules = [ ./home.nix ];
+        modules = [
+          ./home.nix
+        ];
 
         # Optionally use extraSpecialArgs
         # to pass through arguments to home.nix

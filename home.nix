@@ -1,14 +1,7 @@
 { config, pkgs, ... }:
 
 {
-  nixpkgs = {
-    config = {
-      allowUnfree = true;
-      allowUnfreePredicate = (_: true);
-    };
-  };
-
-  imports = [ ./neovim.nix ];
+  imports = [ ./neovim.nix ./kitty.nix ];
 
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
@@ -26,7 +19,8 @@
 
   # The home.packages option allows you to install Nix packages into your
   # environment.
-  home.packages = [
+  home.packages = with pkgs; [
+    bottom # Terminal system monitor
     # # Adds the 'hello' command to your environment. It prints a friendly
     # # "Hello, world!" when run.
     # pkgs.hello
@@ -35,7 +29,7 @@
     # # overrides. You can do that directly here, just don't forget the
     # # parentheses. Maybe you want to install Nerd Fonts with a limited number of
     # # fonts?
-    (pkgs.nerdfonts.override { fonts = [ "FiraCode" "SauceCodePro" ]; })
+    (nerdfonts.override { fonts = [ "FiraCode" "SourceCodePro" ]; })
 
     # # You can also create simple shell scripts directly inside your
     # # configuration. For example, this adds a command 'my-hello' to your
@@ -43,7 +37,34 @@
     # (pkgs.writeShellScriptBin "my-hello" ''
     #   echo "Hello, ${config.home.username}!"
     # '')
+    # slack
+    signal-desktop
+
+    # WebStrom with GL support
+    (symlinkJoin {
+      name = "webstorm";
+      paths = [
+        (writeShellScriptBin "webstorm" ''
+          ${nixgl.auto.nixGLDefault}/bin/nixGL ${unstable.jetbrains.webstorm}/bin/webstorm "$@"
+        '')
+        unstable.jetbrains.webstorm
+      ];
+
+    })
+    # Slack with GL support
+    (symlinkJoin {
+      name = "slack";
+      paths = [
+        (writeShellScriptBin "slack" ''
+          ${nixgl.auto.nixGLDefault}/bin/nixGL ${unstable.slack}/bin/slack "$@"
+        '')
+        unstable.slack
+      ];
+
+    })
   ];
+
+  fonts.fontconfig.enable = true;
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
   # plain files is through 'home.file'.
@@ -81,15 +102,50 @@
   programs.bash = {
     enable = true;
   };
+  programs.fzf = {
+    enable = true;
+    package = with pkgs; symlinkJoin {
+      name = "fzfAndTools";
+      paths = [ fzf fd tree bat ];
+    };
+    enableBashIntegration = true;
+    changeDirWidgetCommand = "fd --type directory --hidden --exclude .git";
+    changeDirWidgetOptions = [ "--preview='tree -C {} | head -200'" ];
+    fileWidgetCommand = "fd --type file --hidden --exclude .git";
+    fileWidgetOptions = [
+      "--delimiter='/'"
+      "--ansi"
+      "--cycle"
+      "--with-nth=-2,-1"
+      "--layout=reverse"
+      "--preview='bat --color=always --style=numbers --line-range=:500 {}'"
+    ];
+    historyWidgetOptions = [
+      "--ansi"
+      "--cycle"
+      "--layout=reverse"
+    ];
+  };
+  programs.direnv = {
+    enable = true;
+    enableBashIntegration = true;
+  };
   programs.starship = {
     enable = true;
     enableBashIntegration = true;
   };
   programs.git = {
     enable = true;
-    package = pkgs.gitAndtools.gitFull;
+    package = pkgs.gitAndTools.gitFull;
     userEmail = "alexandros.sigalas@gmail.com";
     userName = "Alexandros Sigalas";
   };
+
+  xdg.enable = true;
+  # xdg.configFile.kitty = {
+  #   source = ./kitty;
+  #   recursive = true;
+  # };
+  targets.genericLinux.enable = true;
 
 }
