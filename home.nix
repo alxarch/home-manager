@@ -41,26 +41,14 @@
     signal-desktop
 
     # WebStrom with GL support
-    (symlinkJoin {
+    (wrapNixGL {
       name = "webstorm";
-      paths = [
-        (writeShellScriptBin "webstorm" ''
-          ${nixgl.auto.nixGLDefault}/bin/nixGL ${unstable.jetbrains.webstorm}/bin/webstorm "$@"
-        '')
-        unstable.jetbrains.webstorm
-      ];
-
+      package = unstable.jetbrains.webstorm;
     })
     # Slack with GL support
-    (symlinkJoin {
+    (wrapNixGL {
       name = "slack";
-      paths = [
-        (writeShellScriptBin "slack" ''
-          ${nixgl.auto.nixGLDefault}/bin/nixGL ${unstable.slack}/bin/slack "$@"
-        '')
-        unstable.slack
-      ];
-
+      package = unstable.slack;
     })
   ];
 

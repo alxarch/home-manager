@@ -1,14 +1,9 @@
 { config, pkgs, ... }: {
   programs.kitty = {
     enable = true;
-    package = with pkgs; symlinkJoin {
+    package = with pkgs; wrapNixGL {
       name = "kitty";
-      paths = [
-        (writeShellScriptBin "kitty" ''
-          ${nixgl.auto.nixGLDefault}/bin/nixGL ${unstable.kitty}/bin/kitty "$@"
-        '')
-        unstable.kitty
-      ];
+      package = unstable.kitty;
     };
     font = {
       name = "FiraCode Nerd Font";

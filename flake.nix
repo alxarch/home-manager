@@ -25,9 +25,20 @@
           config.allowUnfree = true;
         };
       };
+      wrapNixGLOverlay = final: prev: {
+        wrapNixGL = ({ name, package, ... }: with final; symlinkJoin {
+          name = name;
+          paths = [
+            (writeShellScriptBin name ''
+              ${prev.nixgl.auto.nixGLDefault}/bin/nixGL ${package}/bin/${name} "$@"
+            '')
+            package
+          ];
+        });
+      };
       pkgs = import nixpkgs {
         inherit system;
-        overlays = [unstableOverlay nixgl.overlay ];
+        overlays = [ unstableOverlay nixgl.overlay wrapNixGLOverlay ];
         config.allowUnfree = true;
       };
     in
