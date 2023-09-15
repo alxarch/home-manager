@@ -22,6 +22,7 @@
     settings = {
       enabled_layouts = "tall:bias=50;full_size=1;mirrored=false,stack,fat:bias=50;full_size=1;mirrored=false";
       hide_window_decorations = true;
+      copy_on_select = true;
     };
     theme = "Tokyo Night Day";
   };
