@@ -137,6 +137,10 @@
   programs.git = {
     enable = true;
     package = pkgs.gitAndTools.gitFull;
+    extraConfig = {
+      core.sshCommand = "/usr/bin/ssh";
+      pull.rebase = true;
+    };
     userEmail = "alexandros.sigalas@gmail.com";
     userName = "Alexandros Sigalas";
   };
