@@ -6,6 +6,8 @@
     extraPackages = with pkgs; [
       cargo
       go
+      ripgrep
+      xsel
       zig
       fd
       shfmt
@@ -16,17 +18,44 @@
       marksman
       yaml-language-server
       pyright
+      unstable.emacs
+      pandoc
     ];
     withNodeJs = true;
     extraLuaConfig = ''
       vim.g.mapleader = " "
-      '';
+    '';
     plugins = with pkgs.vimPlugins ; [
       vim-nix
+
       (nvim-treesitter.withPlugins (_: pkgs.tree-sitter.allGrammars))
+      nvim-treesitter-parsers.org
       {
+        plugin = orgmode;
         type = "lua";
+        config = ''
+          -- Load treesitter grammar for org
+          require('orgmode').setup_ts_grammar()
+
+          -- Setup treesitter
+          require('nvim-treesitter.configs').setup({
+            highlight = {
+              enable = true,
+              additional_vim_regex_highlighting = { 'org' },
+            },
+            -- ensure_installed = { 'org' },
+          })
+
+          -- Setup orgmode
+          require('orgmode').setup({
+            org_agenda_files = '~/Documents/**/*.org',
+            org_default_notes_file = '~/Documents/notes.org',
+          })
+        '';
+      }
+      {
         plugin = comment-nvim;
+        type = "lua";
         config = "require('Comment').setup()";
       }
       {
@@ -48,7 +77,7 @@
           vim.keymap.set('n', '<leader>fg', builtin.live_grep, {})
           vim.keymap.set('n', '<leader>fb', builtin.buffers, {})
           vim.keymap.set('n', '<leader>fh', builtin.help_tags, {})
-          '';
+        '';
       }
       {
         type = "lua";
@@ -57,7 +86,7 @@
           vim.o.timeout = true;
           vim.o.timeoutlen = 250;
           require('which-key').setup {}
-          '';
+        '';
       }
       {
         plugin = nvim-lspconfig;

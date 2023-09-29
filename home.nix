@@ -1,7 +1,7 @@
 { config, pkgs, ... }:
 
 {
-  imports = [ ./neovim.nix ./kitty.nix ];
+  imports = [ ./neovim.nix ./kitty.nix ./bash.nix ];
 
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
@@ -50,6 +50,10 @@
       name = "slack";
       package = unstable.slack;
     })
+
+    postgresql
+    plantuml
+    graphviz
   ];
 
   fonts.fontconfig.enable = true;
@@ -86,10 +90,6 @@
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
 
-
-  programs.bash = {
-    enable = true;
-  };
   programs.fzf = {
     enable = true;
     package = with pkgs; symlinkJoin {
@@ -133,11 +133,28 @@
     userName = "Alexandros Sigalas";
   };
 
+
+  programs.emacs = {
+    enable = true;
+    extraPackages = epkgs: [
+      epkgs.typescript-mode
+      epkgs.nix-mode
+      epkgs.nixpkgs-fmt
+      epkgs.evil
+      epkgs.evil-org
+      epkgs.org-mind-map
+    ];
+    extraConfig = (builtins.readFile ./emacs.el) + ''
+      ;; PlantUML was too old on Debian Bookworm, so a recent copy is
+      ;; installed in /usr/local/share
+
+      (setq org-plantuml-jar-path "${pkgs.plantuml}/lib/plantuml.jar")
+      (setq org-ditaa-jar-path "${pkgs.ditaa}/lib/ditaa.jar")
+      (setq org-confirm-babel-evaluate nil)
+    '';
+  };
+
   xdg.enable = true;
-  # xdg.configFile.kitty = {
-  #   source = ./kitty;
-  #   recursive = true;
-  # };
   targets.genericLinux.enable = true;
 
 }
