@@ -1,6 +1,8 @@
 { config, pkgs, ... }:
 {
 
+
+  home.packages = [ pkgs.trash-cli ];
   programs.bash = {
     enable = true;
     enableCompletion = true;

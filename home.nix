@@ -1,7 +1,7 @@
 { config, pkgs, ... }:
 
 {
-  imports = [ ./neovim.nix ./kitty.nix ./bash.nix ];
+  imports = [ ./neovim.nix ./kitty.nix ./bash.nix ./emacs.nix ];
 
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
@@ -40,20 +40,19 @@
     # slack
     signal-desktop
 
-    # WebStrom with GL support
-    (wrapNixGL {
-      name = "webstorm";
-      package = unstable.jetbrains.webstorm;
-    })
     # Slack with GL support
     (wrapNixGL {
       name = "slack";
       package = unstable.slack;
     })
-
-    postgresql
-    plantuml
-    graphviz
+    # Blender with GL support
+    (wrapNixGL {
+      name = "blender";
+      package = unstable.blender;
+    })
+    unstable.vscode
+    unstable.masterpdfeditor
+    unstable.jetbrains.webstorm
   ];
 
   fonts.fontconfig.enable = true;
@@ -132,27 +131,32 @@
     userEmail = "alexandros.sigalas@gmail.com";
     userName = "Alexandros Sigalas";
   };
+  programs.tmux.enable = true;
+  programs.tmux = {
+    # aggressiveResize = true;
+    baseIndex = 1;
+    clock24 = true;
+    # customPaneNavigationAndResize = true;
+    # escapeTime = 200;
+    # historyLimit = 10000;
+    keyMode = "vi";
+    mouse = true;
+    # newSession = true;
+    prefix = "C-a";
+    # reverseSplit = false;
+    # sensibleOnTop = true;
+    terminal = "xterm-256color";
+    extraConfig = ''
+      set-default colorset-option -ga terminal-overrides ",xterm-256color:Tc"
+      bind  c  new-window      -c "#{pane_current_path}"
+      bind  %  split-window -h -c "#{pane_current_path}"
+      bind '"' split-window -v -c "#{pane_current_path}"
 
-
-  programs.emacs = {
-    enable = true;
-    extraPackages = epkgs: [
-      epkgs.typescript-mode
-      epkgs.nix-mode
-      epkgs.nixpkgs-fmt
-      epkgs.evil
-      epkgs.evil-org
-      epkgs.org-mind-map
-    ];
-    extraConfig = (builtins.readFile ./emacs.el) + ''
-      ;; PlantUML was too old on Debian Bookworm, so a recent copy is
-      ;; installed in /usr/local/share
-
-      (setq org-plantuml-jar-path "${pkgs.plantuml}/lib/plantuml.jar")
-      (setq org-ditaa-jar-path "${pkgs.ditaa}/lib/ditaa.jar")
-      (setq org-confirm-babel-evaluate nil)
     '';
   };
+
+
+
 
   xdg.enable = true;
   targets.genericLinux.enable = true;
