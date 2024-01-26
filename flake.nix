@@ -48,6 +48,7 @@
         modules = [
           ./home.nix
           ./neovim.nix
+          ./tmux.nix
           ./bash.nix
         ];
       };
@@ -59,6 +60,7 @@
         modules = [
           ./home.nix
           ./bash.nix
+          ./tmux.nix
           ./kitty.nix
           ./neovim.nix
           {
