@@ -5,6 +5,7 @@
     defaultEditor = true;
     extraPackages = with pkgs; [
       cargo
+      python3
       go
       ripgrep
       xsel

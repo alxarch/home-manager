@@ -43,17 +43,39 @@
       };
     in
     {
-      homeConfigurations."alxarch" = home-manager.lib.homeManagerConfiguration {
+      homeConfigurations."alxarch@archon" = home-manager.lib.homeManagerConfiguration {
+        inherit pkgs;
+        modules = [
+          ./home.nix
+          ./neovim.nix
+          ./bash.nix
+        ];
+      };
+      homeConfigurations."alxarch@darktemplar" = home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
 
         # Specify your home configuration modules here, for example,
         # the path to your home.nix.
         modules = [
           ./home.nix
+          ./bash.nix
+          ./kitty.nix
+          ./neovim.nix
+          {
+            home.packages = with pkgs; [
+              # Slack with GL support
+              (wrapNixGL {
+                name = "slack";
+                package = unstable.slack;
+              })
+              # # Blender with GL support
+              # (wrapNixGL {
+              #   name = "blender";
+              #   package = unstable.blender;
+              # })
+            ];
+          }
         ];
-
-        # Optionally use extraSpecialArgs
-        # to pass through arguments to home.nix
       };
     };
 }

@@ -1,8 +1,6 @@
 { config, pkgs, ... }:
 
 {
-  imports = [ ./neovim.nix ./kitty.nix ./bash.nix ./emacs.nix ];
-
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
   home.username = "alxarch";
@@ -38,21 +36,11 @@
     #   echo "Hello, ${config.home.username}!"
     # '')
     # slack
-    signal-desktop
+    # signal-desktop
 
-    # Slack with GL support
-    (wrapNixGL {
-      name = "slack";
-      package = unstable.slack;
-    })
-    # Blender with GL support
-    (wrapNixGL {
-      name = "blender";
-      package = unstable.blender;
-    })
-    unstable.vscode
-    unstable.masterpdfeditor
-    unstable.jetbrains.webstorm
+    # unstable.vscode
+    # unstable.masterpdfeditor
+    # unstable.jetbrains.webstorm
   ];
 
   fonts.fontconfig.enable = true;
@@ -83,7 +71,7 @@
   #
   # if you don't want to manage your shell through Home Manager.
   home.sessionVariables = {
-    # EDITOR = "emacs";
+    EDITOR = "nvim";
   };
 
   # Let Home Manager install and manage itself.
@@ -116,6 +104,7 @@
   programs.direnv = {
     enable = true;
     enableBashIntegration = true;
+    nix-direnv.enable = true;
   };
   programs.starship = {
     enable = true;
@@ -147,7 +136,7 @@
     # sensibleOnTop = true;
     terminal = "xterm-256color";
     extraConfig = ''
-      set-default colorset-option -ga terminal-overrides ",xterm-256color:Tc"
+      set -ga terminal-overrides ",xterm-256color:Tc"
       bind  c  new-window      -c "#{pane_current_path}"
       bind  %  split-window -h -c "#{pane_current_path}"
       bind '"' split-window -v -c "#{pane_current_path}"
@@ -155,8 +144,7 @@
     '';
   };
 
-
-
+  services.ssh-agent.enable = true;
 
   xdg.enable = true;
   targets.genericLinux.enable = true;
