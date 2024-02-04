@@ -23,6 +23,8 @@
       lazygit
     ];
     withNodeJs = true;
+    vimAlias = true;
+    vimdiffAlias = true;
     extraLuaConfig = builtins.readFile ./neovim/init.lua;
     plugins = with pkgs.vimPlugins ; [
       vim-nix
