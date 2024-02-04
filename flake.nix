@@ -43,6 +43,14 @@
       };
     in
     {
+      homeConfigurations."alxarch@wsl" = home-manager.lib.homeManagerConfiguration {
+        inherit pkgs;
+        modules = [
+          ./home.nix
+          ./neovim.nix
+          ./bash.nix
+        ];
+      };
       homeConfigurations."alxarch@archon" = home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
         modules = [
