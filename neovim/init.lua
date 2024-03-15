@@ -111,7 +111,7 @@ local capabilities = require('cmp_nvim_lsp').default_capabilities()
 function lspsetup(name, config)
 	lspconfig[name].setup(vim.tbl_extend("force", { capabilities = capabilities }, config or {}))
 end
-lspsetup('rnix')
+lspsetup('nil_ls')
 lspsetup('tsserver')
 lspsetup('bashls')
 lspsetup('jsonls')

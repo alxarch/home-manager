@@ -12,13 +12,13 @@
       zig
       fd
       shfmt
-      rnix-lsp
-      nodePackages.typescript-language-server
+      unstable.nil
+      unstable.nodePackages.typescript-language-server
       nodePackages.bash-language-server
       nodePackages.vscode-langservers-extracted
       marksman
       yaml-language-server
-      pyright
+      unstable.pyright
       elixir-ls
       lazygit
     ];
