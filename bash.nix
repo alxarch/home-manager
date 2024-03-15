@@ -11,15 +11,13 @@
     historyIgnore = [ "ls" "cd" "exit" ];
     shellAliases =
       # Wrap destructive file operations to force --interactive
-      let wrapInteractive = { name, ... }:
+      let wrapInteractive = name:
         let
           app = pkgs.writeShellApplication {
             inherit name;
-            runtimeInputs = with pkgs; [ coreutils appendToVar ];
+            runtimeInputs = with pkgs; [ coreutils ];
             text = ''
-              args="''$@"
-              appendToVar args --interactive
-              ${name} ''$args
+              ${name} "''$@" --interactive
             '';
           }; in
         "${app}/bin/${name}";
@@ -28,8 +26,8 @@
       {
         ".." = "cd ..";
         "g" = "git";
-        "rm" = wrapInteractive "rm";
-        "mv" = wrapInteractive "mv";
+        "rm" = (wrapInteractive "rm");
+        "mv" = (wrapInteractive "mv");
       };
     initExtra = ''
       # enable vi editing

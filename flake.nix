@@ -49,6 +49,8 @@
           ./home.nix
           ./neovim.nix
           ./bash.nix
+          ./tmux.nix
+          ./ssh.nix
         ];
       };
       homeConfigurations."alxarch@archon" = home-manager.lib.homeManagerConfiguration {
