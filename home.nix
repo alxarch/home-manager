@@ -116,6 +116,7 @@
     package = pkgs.gitAndTools.gitFull;
     extraConfig = {
       pull.rebase = true;
+      rerere.enabled = true;
     };
     userEmail = "alexandros.sigalas@gmail.com";
     userName = "Alexandros Sigalas";
