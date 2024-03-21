@@ -122,6 +122,7 @@
     userName = "Alexandros Sigalas";
   };
 
+  programs.ripgrep.enable = true;
   programs.lazygit.enable = true;
 
   xdg.enable = true;
