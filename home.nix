@@ -122,6 +122,7 @@
     userName = "Alexandros Sigalas";
   };
 
+  programs.lazygit.enable = true;
 
   xdg.enable = true;
   targets.genericLinux.enable = true;
