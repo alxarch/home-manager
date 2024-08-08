@@ -49,6 +49,7 @@
           ./home.nix
           ./neovim.nix
           ./bash.nix
+          ./git.nix
           ./tmux.nix
           ./ssh.nix
         ];

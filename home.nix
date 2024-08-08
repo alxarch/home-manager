@@ -111,19 +111,8 @@
     enableBashIntegration = true;
   };
 
-  programs.git = {
-    enable = true;
-    package = pkgs.gitAndTools.gitFull;
-    extraConfig = {
-      pull.rebase = true;
-      rerere.enabled = true;
-    };
-    userEmail = "alexandros.sigalas@gmail.com";
-    userName = "Alexandros Sigalas";
-  };
 
   programs.ripgrep.enable = true;
-  programs.lazygit.enable = true;
 
   xdg.enable = true;
   targets.genericLinux.enable = true;

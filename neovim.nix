@@ -51,6 +51,7 @@
       cmp-cmdline
       vim-vsnip
       cmp-vsnip
+      conjure
     ];
 
   };
