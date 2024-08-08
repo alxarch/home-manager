@@ -1,7 +1,8 @@
-{ pkgs,... }:
+{ pkgs, ... }:
 {
   programs.neovim = {
     enable = true;
+    package = pkgs.unstable.neovim-unwrapped;
     defaultEditor = true;
     extraPackages = with pkgs; [
       cargo
@@ -12,6 +13,8 @@
       zig
       fd
       shfmt
+      lua-language-server
+      stylua
       unstable.nil
       unstable.nodePackages.typescript-language-server
       nodePackages.bash-language-server
@@ -21,6 +24,7 @@
       unstable.pyright
       elixir-ls
       lazygit
+      ruff
     ];
     withNodeJs = true;
     vimAlias = true;
@@ -35,23 +39,26 @@
       comment-nvim
       lualine-nvim
       gitsigns-nvim
-      {
-        plugin = tokyonight-nvim;
-        config = "colorscheme tokyonight-storm";
-      }
+      tokyonight-nvim
       plenary-nvim
       nvim-web-devicons
       telescope-nvim
-      which-key-nvim
-      nvim-lspconfig
-      nvim-cmp
-      cmp-nvim-lsp
-      cmp-buffer
-      cmp-path
-      cmp-cmdline
-      vim-vsnip
-      cmp-vsnip
-      conjure
+      pkgs.unstable.vimPlugins.which-key-nvim
+      pkgs.unstable.vimPlugins.nvim-lspconfig
+      # nvim-cmp
+      # cmp-nvim-lsp
+      # cmp-buffer
+      # cmp-path
+      # cmp-cmdline
+      # cmp-git
+      # lsp-zero-nvim
+      # cmp_luasnip
+      # luasnip
+      # conjure
+      pkgs.unstable.vimPlugins.none-ls-nvim
+      pkgs.unstable.vimPlugins.vim-dadbod
+      pkgs.unstable.vimPlugins.vim-dadbod-ui
+      pkgs.unstable.vimPlugins.vim-dadbod-completion
     ];
 
   };

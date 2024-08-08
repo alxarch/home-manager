@@ -38,7 +38,7 @@
       };
       pkgs = import nixpkgs {
         inherit system;
-        overlays = [ unstableOverlay nixgl.overlay wrapNixGLOverlay ];
+        overlays = [ unstableOverlay ];
         config.allowUnfree = true;
       };
     in
@@ -61,33 +61,6 @@
           ./neovim.nix
           ./tmux.nix
           ./bash.nix
-        ];
-      };
-      homeConfigurations."alxarch@darktemplar" = home-manager.lib.homeManagerConfiguration {
-        inherit pkgs;
-
-        # Specify your home configuration modules here, for example,
-        # the path to your home.nix.
-        modules = [
-          ./home.nix
-          ./bash.nix
-          ./tmux.nix
-          ./kitty.nix
-          ./neovim.nix
-          {
-            home.packages = with pkgs; [
-              # Slack with GL support
-              (wrapNixGL {
-                name = "slack";
-                package = unstable.slack;
-              })
-              # # Blender with GL support
-              # (wrapNixGL {
-              #   name = "blender";
-              #   package = unstable.blender;
-              # })
-            ];
-          }
         ];
       };
     };
