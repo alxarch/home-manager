@@ -16,7 +16,63 @@ vim.filetype.add({
 
 require("lualine").setup()
 require("Comment").setup()
-require("gitsigns").setup()
+require("gitsigns").setup({
+	on_attach = function(bufnr)
+		local wk = require("which-key")
+		local gitsigns = require("gitsigns")
+
+		local function map(mode, l, r, opts)
+			opts = opts or {}
+			opts.buffer = bufnr
+			vim.keymap.set(mode, l, r, opts)
+		end
+
+		-- Navigation
+		map("n", "]c", function()
+			if vim.wo.diff then
+				vim.cmd.normal({ "]c", bang = true })
+			else
+				gitsigns.nav_hunk("next")
+			end
+		end, { desc = "Go to next commit hunk" })
+
+		map("n", "[c", function()
+			if vim.wo.diff then
+				vim.cmd.normal({ "[c", bang = true })
+			else
+				gitsigns.nav_hunk("prev")
+			end
+		end, { desc = "Go to prev commit hunk" })
+		wk.add({ "<leader>h", group = "Git commit hunk" })
+
+		-- Actions
+		map("n", "<leader>hs", gitsigns.stage_hunk, { desc = "Stage hunk" })
+		map("n", "<leader>hr", gitsigns.reset_hunk, { desc = "Reset hunk" })
+		map("v", "<leader>hs", function()
+			gitsigns.stage_hunk({ vim.fn.line("."), vim.fn.line("v") })
+		end, { desc = "Stage selected lines" })
+		map("v", "<leader>hr", function()
+			gitsigns.reset_hunk({ vim.fn.line("."), vim.fn.line("v") })
+		end, { desc = "Reset selected lines" })
+		map("n", "<leader>hS", gitsigns.stage_buffer, { desc = "Stage buffer" })
+		map("n", "<leader>hu", gitsigns.undo_stage_hunk, { desc = "Undo stage hunk" })
+		map("n", "<leader>hR", gitsigns.reset_buffer, { desc = "Reset file" })
+		map("n", "<leader>hp", gitsigns.preview_hunk, { desc = "Preview hunk" })
+		map("n", "<leader>hb", function()
+			gitsigns.blame_line({ full = true })
+		end, { desc = "Blame line" })
+		map("n", "<leader>tb", gitsigns.toggle_current_line_blame, { desc = "Toggle current line blame" })
+		map("n", "<leader>hd", gitsigns.diffthis, { desc = "Diff hunk" })
+		map("n", "<leader>hD", function()
+			gitsigns.diffthis("~")
+		end, { desc = "Diff hunk to HEAD" })
+		map("n", "<leader>td", gitsigns.toggle_deleted, { desc = "Toggle git deleted signs" })
+
+		-- Text object
+		map({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>", { desc = "Select hunk" })
+	end,
+})
+
 require("nvim-treesitter.configs").setup({
 	highlight = {
 		enable = true,
@@ -94,7 +150,7 @@ wk.add({
 local setup_lsp = function(name, config)
 	local lspconfig = require("lspconfig")
 	-- local capabilities = require("cmp_nvim_lsp").default_capabilities()
-	lspconfig[name].setup(vim.tbl_extend("force", {  }, config or {}))
+	lspconfig[name].setup(vim.tbl_extend("force", {}, config or {}))
 end
 
 setup_lsp("nil_ls")
@@ -144,37 +200,42 @@ setup_lsp("pyright")
 setup_lsp("elixirls", {
 	cmd = { "elixir-ls" },
 })
-
 -- Use LspAttach autocommand to only map the following keys
 -- after the language server attaches to the current buffer
 vim.api.nvim_create_autocmd("LspAttach", {
 	callback = function(ev)
 		-- Enable completion triggered by <c-x><c-o>
 		vim.bo[ev.buf].omnifunc = "v:lua.vim.lsp.omnifunc"
-        local opts = { buffer = ev.buf, silent = true, noremap = true}
-        opts.desc = "Autocomplete with LSP"
+		local opts = { buffer = ev.buf, silent = true, noremap = true }
+		opts.desc = "Autocomplete with LSP"
 		vim.keymap.set("i", "<Tab>", function()
-                if vim.fn.pumvisible() then
-                        vim.api.nvim_input("<C-n>")
-                else
-                        vim.api.nvim_input("<C-x><C-o>")
-               end
-        end, opts)
+			if vim.fn.pumvisible() then
+				vim.api.nvim_input("<C-n>")
+			else
+				vim.api.nvim_input("<C-x><C-o>")
+			end
+		end, opts)
 		vim.keymap.set("i", "<S-Tab>", function()
-                if vim.fn.pumvisible() then
-                        vim.api.nvim_input("<C-p>")
-                else
-                        vim.api.nvim_input("<S-Tab>")
-               end
-        end, opts)
+			if vim.fn.pumvisible() then
+				vim.api.nvim_input("<C-p>")
+			else
+				vim.api.nvim_input("<S-Tab>")
+			end
+		end, opts)
 	end,
 })
 
+vim.api.nvim_create_autocmd("BufWritePre", {
+	callback = function()
+		vim.lsp.buf.format({ async = false })
+	end,
+})
 local null_ls = require("null-ls")
 
 null_ls.setup({
 	sources = {
 		null_ls.builtins.formatting.stylua,
+		null_ls.builtins.formatting.black,
 	},
 })
 

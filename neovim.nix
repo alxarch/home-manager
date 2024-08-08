@@ -25,6 +25,7 @@
       elixir-ls
       lazygit
       ruff
+      python3Packages.black
     ];
     withNodeJs = true;
     vimAlias = true;
