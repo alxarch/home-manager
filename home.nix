@@ -81,6 +81,8 @@
     enable = true;
     package = with pkgs; symlinkJoin {
       name = "fzfAndTools";
+      meta.mainProgram = fzf.meta.mainProgram;
+      inherit (fzf) version;
       paths = [ fzf fd tree bat ];
     };
     enableBashIntegration = true;
