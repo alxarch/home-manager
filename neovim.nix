@@ -6,7 +6,6 @@
     defaultEditor = true;
     extraPackages = with pkgs; [
       cargo
-      python3
       go
       ripgrep
       xsel
@@ -21,11 +20,17 @@
       nodePackages.vscode-langservers-extracted
       marksman
       yaml-language-server
-      unstable.pyright
       elixir-ls
       lazygit
-      ruff
-      python3Packages.black
+
+      python3
+      unstable.pyright
+      unstable.python3Packages.python-lsp-server
+      unstable.python3Packages.python-lsp-black
+      unstable.python3Packages.pylsp-mypy
+      unstable.python3Packages.pylsp-rope
+      unstable.python3Packages.pyls-isort
+      unstable.ruff
     ];
     withNodeJs = true;
     vimAlias = true;

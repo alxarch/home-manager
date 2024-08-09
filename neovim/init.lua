@@ -195,8 +195,11 @@ setup_lsp("lua_ls", {
 setup_lsp("eslint")
 setup_lsp("marksman")
 setup_lsp("yamlls")
+
 setup_lsp("ruff")
 setup_lsp("pyright")
+setup_lsp("pylsp")
+
 setup_lsp("elixirls", {
 	cmd = { "elixir-ls" },
 })
