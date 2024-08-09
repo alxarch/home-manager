@@ -209,17 +209,17 @@ vim.api.nvim_create_autocmd("LspAttach", {
 		local opts = { buffer = ev.buf, silent = true, noremap = true }
 		opts.desc = "Autocomplete with LSP"
 		vim.keymap.set("i", "<Tab>", function()
-			if vim.fn.pumvisible() then
-				vim.api.nvim_input("<C-n>")
-			else
+			if vim.fn.pumvisible() == 0 then
 				vim.api.nvim_input("<C-x><C-o>")
+			else
+				vim.api.nvim_input("<C-n>")
 			end
 		end, opts)
 		vim.keymap.set("i", "<S-Tab>", function()
-			if vim.fn.pumvisible() then
-				vim.api.nvim_input("<C-p>")
-			else
+			if vim.fn.pumvisible() == 0 then
 				vim.api.nvim_input("<S-Tab>")
+			else
+				vim.api.nvim_input("<C-p>")
 			end
 		end, opts)
 	end,
