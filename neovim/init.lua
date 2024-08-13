@@ -1,10 +1,36 @@
-vim.cmd([[colorscheme tokyonight]])
-vim.o.cmdheight = 0
+-- Faster startup
+vim.loader.enable()
+
+-- get rid of vi compatibility mode
+vim.o.compatible = false
+
+vim.cmd([[filetype plugin indent on]])
+vim.cmd([[syntax enable]])
+
+vim.o.tabstop = 4
 vim.o.tabstop = 4
 vim.o.expandtab = true
-vim.o.completeopt = "menu,menuone,preview"
+vim.o.shiftwidth = 4
+
+-- 3 lines offset before bottom scroll
+vim.o.scrolloff = 3
+vim.o.wrap = false
+-- Highlight current line
+vim.o.cursorline = true
+-- Show line numbers
+vim.o.number = true
+
+vim.o.cmdheight = 1
+vim.o.ttyfast = true
+vim.o.autoread = true
+vim.opt.spell = true
+vim.opt.wildmode = { "longest", "list", "full" }
+
+vim.opt.completeopt = { "menu", "menuone", "preview" }
+
 vim.g.mapleader = " "
 vim.g.localeader = "\\"
+
 -- Your DBUI configuration
 vim.g.db_ui_use_nerd_fonts = 1
 vim.keymap.set("i", "jj", "<Esc>")
@@ -14,11 +40,12 @@ vim.filetype.add({
 	},
 })
 
-require("lualine").setup()
+vim.cmd([[colorscheme tokyonight]])
+
+-- require("lualine").setup()
 require("Comment").setup()
 require("gitsigns").setup({
 	on_attach = function(bufnr)
-		local wk = require("which-key")
 		local gitsigns = require("gitsigns")
 
 		local function map(mode, l, r, opts)
@@ -43,6 +70,7 @@ require("gitsigns").setup({
 				gitsigns.nav_hunk("prev")
 			end
 		end, { desc = "Go to prev commit hunk" })
+		local wk = require("which-key")
 		wk.add({ "<leader>h", group = "Git commit hunk" })
 
 		-- Actions
@@ -114,6 +142,8 @@ wk.add({
 	{ "<leader>fr", builtin.oldfiles, desc = "Recent files" },
 	{ "<leader>fh", builtin.help_tags, desc = "Find help" },
 	{ "<leader><Space>", builtin.buffers, desc = "Find buffer" },
+	{ "[b", vim.cmd.bprevious, desc = "Go to prev buffer" },
+	{ "]b", vim.cmd.bNext, desc = "Go to next buffer" },
 	{ "[d", vim.diagnostic.goto_prev, desc = "Go to prev diagnostic" },
 	{ "]d", vim.diagnostic.goto_next, desc = "Go to next diagnostic" },
 	{ "<leader>e", vim.diagnostic.open_float, desc = "Show diagnostics" },
@@ -203,6 +233,12 @@ setup_lsp("pylsp")
 setup_lsp("elixirls", {
 	cmd = { "elixir-ls" },
 })
+
+local has_words_before = function()
+	unpack = unpack or table.unpack
+	local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+	return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
+end
 -- Use LspAttach autocommand to only map the following keys
 -- after the language server attaches to the current buffer
 vim.api.nvim_create_autocmd("LspAttach", {
@@ -212,35 +248,69 @@ vim.api.nvim_create_autocmd("LspAttach", {
 		local opts = { buffer = ev.buf, silent = true, noremap = true }
 		opts.desc = "Autocomplete with LSP"
 		vim.keymap.set("i", "<Tab>", function()
-			if vim.fn.pumvisible() == 0 then
+			if vim.fn.pumvisible() == 1 then
+				vim.api.nvim_input("<C-n>")
+			elseif has_words_before() then
 				vim.api.nvim_input("<C-x><C-o>")
 			else
-				vim.api.nvim_input("<C-n>")
+				vim.api.nvim_feedkeys(vim.keycode("<Tab>"), "n", false)
 			end
 		end, opts)
 		vim.keymap.set("i", "<S-Tab>", function()
-			if vim.fn.pumvisible() == 0 then
-				vim.api.nvim_input("<S-Tab>")
-			else
+			if vim.fn.pumvisible() == 1 then
 				vim.api.nvim_input("<C-p>")
+			else
+				vim.api.nvim_feedkeys(vim.keycode("<BS>"), "n", false)
 			end
 		end, opts)
 	end,
 })
-
-vim.api.nvim_create_autocmd("BufWritePre", {
-	callback = function()
-		vim.lsp.buf.format({ async = false })
-	end,
-})
-local null_ls = require("null-ls")
-
-null_ls.setup({
-	sources = {
-		null_ls.builtins.formatting.stylua,
-		null_ls.builtins.formatting.black,
+require("conform").setup({
+	formatters_by_ft = {
+		lua = { "stylua" },
+		-- Conform will run multiple formatters sequentially
+		go = { "goimports", "gofmt" },
+		-- You can use a function here to determine the formatters dynamically
+		python = function(bufnr)
+			if require("conform").get_formatter_info("ruff_format", bufnr).available then
+				return { "ruff_format" }
+			else
+				return { "isort", "black" }
+			end
+		end,
 	},
+	-- Set this to change the default values when calling conform.format()
+	-- This will also affect the default values for format_on_save/format_after_save
+	default_format_opts = {
+		lsp_format = "fallback",
+	},
+	-- If this is set, Conform will run the formatter on save.
+	-- It will pass the table to conform.format().
+	-- This can also be a function that returns the table.
+	format_on_save = {
+		-- I recommend these options. See :help conform.format for details.
+		lsp_format = "fallback",
+		timeout_ms = 500,
+	},
+	-- Conform will notify you when a formatter errors
+	notify_on_error = true,
+	-- Conform will notify you when no formatters are available for the buffer
+	notify_no_formatters = true,
 })
+
+-- vim.api.nvim_create_autocmd("BufWritePre", {
+--     callback = function()
+--         vim.lsp.buf.format({ async = false })
+--     end,
+-- })
+-- local null_ls = require("null-ls")
+--
+-- null_ls.setup({
+-- 	sources = {
+-- 		null_ls.builtins.formatting.stylua,
+-- 		null_ls.builtins.formatting.black,
+-- 	},
+-- })
 
 -- Set up nvim-cmp.
 -- local lsp_zero = require('lsp-zero')

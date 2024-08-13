@@ -4,7 +4,7 @@
     enable = true;
     package = pkgs.unstable.neovim-unwrapped;
     defaultEditor = true;
-    extraPackages = with pkgs; [
+    extraPackages = with pkgs.unstable; [
       cargo
       go
       ripgrep
@@ -14,57 +14,49 @@
       shfmt
       lua-language-server
       stylua
-      unstable.nil
-      unstable.nodePackages.typescript-language-server
+      nil
+      nodePackages.typescript-language-server
       nodePackages.bash-language-server
       nodePackages.vscode-langservers-extracted
       marksman
       yaml-language-server
       elixir-ls
       lazygit
+      codespell
 
       python3
-      unstable.pyright
-      unstable.python3Packages.python-lsp-server
-      unstable.python3Packages.python-lsp-black
-      unstable.python3Packages.pylsp-mypy
-      unstable.python3Packages.pylsp-rope
-      unstable.python3Packages.pyls-isort
-      unstable.ruff
+      pyright
+      python3Packages.python-lsp-server
+      python3Packages.python-lsp-black
+      python3Packages.pylsp-mypy
+      python3Packages.pylsp-rope
+      python3Packages.pyls-isort
+      ruff
     ];
     withNodeJs = true;
     vimAlias = true;
     vimdiffAlias = true;
     extraLuaConfig = builtins.readFile ./neovim/init.lua;
-    plugins = with pkgs.vimPlugins ; [
-      vim-nix
-      vim-lfe
+    plugins = with pkgs.unstable.vimPlugins ; [
+      nvim-lspconfig
       nvim-treesitter.withAllGrammars
       nvim-treesitter-parsers.elixir
       nvim-treesitter-parsers.hurl
-      comment-nvim
-      lualine-nvim
       gitsigns-nvim
+      comment-nvim
       tokyonight-nvim
+      conform-nvim
+      vim-nix
+      fzf-vim
+      which-key-nvim
+
       plenary-nvim
       nvim-web-devicons
       telescope-nvim
-      pkgs.unstable.vimPlugins.which-key-nvim
-      pkgs.unstable.vimPlugins.nvim-lspconfig
-      # nvim-cmp
-      # cmp-nvim-lsp
-      # cmp-buffer
-      # cmp-path
-      # cmp-cmdline
-      # cmp-git
-      # lsp-zero-nvim
-      # cmp_luasnip
-      # luasnip
-      # conjure
-      pkgs.unstable.vimPlugins.none-ls-nvim
-      pkgs.unstable.vimPlugins.vim-dadbod
-      pkgs.unstable.vimPlugins.vim-dadbod-ui
-      pkgs.unstable.vimPlugins.vim-dadbod-completion
+      # pkgs.unstable.vimPlugins.none-ls-nvim
+      # pkgs.unstable.vimPlugins.vim-dadbod
+      # pkgs.unstable.vimPlugins.vim-dadbod-ui
+      # pkgs.unstable.vimPlugins.vim-dadbod-completion
     ];
 
   };
