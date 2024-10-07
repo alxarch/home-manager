@@ -43,6 +43,17 @@
       };
     in
     {
+      homeConfigurations."alxarch@ubuntu" = home-manager.lib.homeManagerConfiguration {
+        inherit pkgs;
+        modules = [
+          ./home.nix
+          ./neovim.nix
+          ./bash.nix
+          ./git.nix
+          ./tmux.nix
+          ./ssh.nix
+        ];
+      };
       homeConfigurations."alxarch@wsl" = home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
         modules = [

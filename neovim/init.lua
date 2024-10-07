@@ -298,6 +298,13 @@ require("conform").setup({
 	notify_no_formatters = true,
 })
 
+vim.cmd([[
+  augroup KeyboardLayout
+    autocmd!
+    autocmd InsertLeave * silent exec "!xkb-switch -s 'us(euro)'"
+  augroup END
+]])
+
 -- vim.api.nvim_create_autocmd("BufWritePre", {
 --     callback = function()
 --         vim.lsp.buf.format({ async = false })

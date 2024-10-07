@@ -32,6 +32,7 @@
       python3Packages.pylsp-rope
       python3Packages.pyls-isort
       ruff
+      xkb-switch
     ];
     withNodeJs = true;
     vimAlias = true;
