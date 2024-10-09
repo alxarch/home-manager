@@ -20,6 +20,7 @@
       User admin
       UserKnownHostsFile /dev/null
       StrictHostKeyChecking no
+      IdentityFile ~/.ssh/id_ed25519_wsl
 
     # All the other instances
     Host eosc_federation-prod-proxy1 eosc_federation-prod-proxy2 eosc_federation-prod-proxy3 eosc_federation-prod-mdx1 eosc_federation-prod-mdx2 eosc_federation-prod-mdx3 eosc_federation-prod-scimapi1 eosc_federation-prod-scimapi2 eosc_federation-prod-nagios1 eosc_federation-prod-container1 eosc_federation-staging-proxy1 eosc_federation-staging-proxy2 eosc_federation-staging-proxy3 eosc_federation-staging-mdx1 eosc_federation-staging-mdx2 eosc_federation-staging-mdx3 eosc_federation-staging-scimapi1 eosc_federation-staging-scimapi2 eosc_federation-staging-nagios1 eosc_federation-testing-proxy1 eosc_federation-testing-proxy2 eosc_federation-testing-mdx1 eosc_federation-testing-mdx2 eosc_federation-testing-scimapi1 eosc_federation-testing-scimapi2 eosc_federation-testing-nagios1
@@ -28,6 +29,7 @@
       ProxyJump eosc_federation-jumphost
       UserKnownHostsFile /dev/null
       StrictHostKeyChecking no
+      IdentityFile ~/.ssh/id_ed25519_wsl
       '';
       services.ssh-agent.enable = true;
 }
