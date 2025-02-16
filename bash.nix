@@ -29,6 +29,7 @@
         "d" = "pushd";
         "D" = "popd";
       };
+    sessionVariables.CDPATH = "~/code:~";
     initExtra = ''
       # enable vi editing
       set -o vi
@@ -40,6 +41,11 @@
       # Create a directory and cd into it. 
       # Makes a termporary directory if no name is provided
       function mkcd { if [ -z "$1" ]; then cd "$(mktemp -d)"; else mkdir -p "$1" && cd "$1"; fi }
+
+      # Enable pushd to autocomplete CDPATH entries
+      complete -F _cd -o nospace pushd
+      bind '"\C-]": "pushd +1\n"'
+      bind '"\C-[": "pushd -0\n"'
     '';
   };
 }
