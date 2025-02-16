@@ -267,6 +267,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
 })
 require("conform").setup({
 	formatters_by_ft = {
+		yaml = { "yamlfmt" },
 		lua = { "stylua" },
 		-- Conform will run multiple formatters sequentially
 		go = { "goimports", "gofmt" },

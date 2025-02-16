@@ -20,6 +20,7 @@
       nodePackages.vscode-langservers-extracted
       marksman
       yaml-language-server
+      yamlfmt
       elixir-ls
       lazygit
       codespell
