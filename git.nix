@@ -1,5 +1,6 @@
 { pkgs, ... }:
 {
+  services.gpg-agent.enable = true;
 
   programs.git = {
     enable = true;
@@ -7,6 +8,7 @@
     extraConfig = {
       pull.rebase = true;
       rerere.enabled = true;
+      init.defaultBranch = "main";
     };
     userEmail = "alexandros.sigalas@gmail.com";
     userName = "Alexandros Sigalas";
