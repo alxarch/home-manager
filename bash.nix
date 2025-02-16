@@ -1,7 +1,5 @@
 { config, pkgs, ... }:
 {
-
-
   home.packages = [ pkgs.trash-cli ];
   programs.bash = {
     enable = true;
@@ -28,6 +26,8 @@
         "g" = "git";
         "rm" = (wrapInteractive "rm");
         "mv" = (wrapInteractive "mv");
+        "d" = "pushd";
+        "D" = "popd";
       };
     initExtra = ''
       # enable vi editing
