@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 
 {
   # Home Manager needs a bit of information about you and the paths it should
@@ -42,6 +42,7 @@
     # unstable.masterpdfeditor
     # unstable.jetbrains.webstorm
     aws-vault
+    awscli
   ];
 
   fonts.fontconfig.enable = true;
@@ -74,11 +75,17 @@
   home.sessionVariables = {
     EDITOR = "nvim";
     AWS_VAULT_BACKEND = "pass";
+    AWS_VAULT_PASS_CMD = "${config.programs.password-store.package}/bin/pass";
   };
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
 
+  programs.gpg.enable = true;
+  programs.gpg.mutableTrust = true;
+  programs.gpg.mutableKeys = true;
+  services.gpg-agent.enable = true;
+  services.gpg-agent.pinentryPackage = pkgs.pinentry-curses;
   programs.password-store.enable = true;
   programs.password-store.package = pkgs.pass.withExtensions (exts: [ exts.pass-otp ]);
 
