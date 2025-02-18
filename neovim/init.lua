@@ -184,7 +184,7 @@ local setup_lsp = function(name, config)
 end
 
 setup_lsp("nil_ls")
-setup_lsp("tsserver")
+setup_lsp("ts_ls")
 setup_lsp("bashls")
 setup_lsp("jsonls")
 setup_lsp("cssls")
