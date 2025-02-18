@@ -41,6 +41,7 @@
     # unstable.vscode
     # unstable.masterpdfeditor
     # unstable.jetbrains.webstorm
+    aws-vault
   ];
 
   fonts.fontconfig.enable = true;
@@ -72,10 +73,14 @@
   # if you don't want to manage your shell through Home Manager.
   home.sessionVariables = {
     EDITOR = "nvim";
+    AWS_VAULT_BACKEND = "pass";
   };
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
+
+  programs.password-store.enable = true;
+  programs.password-store.package = pkgs.pass.withExtensions (exts: [ exts.pass-otp ]);
 
   programs.fzf = {
     enable = true;
