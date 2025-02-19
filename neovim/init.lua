@@ -164,10 +164,8 @@ wk.add({
 	},
 	{
 		"<leader>F",
-		function()
-			require("conform").format({ async = true })
-		end,
-		desc = "Format buffer",
+		"<cmd>Format<cr>",
+		desc = "Format selection or buffer",
 	},
 	{ "<C-k>", vim.lsp.buf.signature_help, desc = "Show signature help" },
 	{ "K", vim.lsp.buf.hover, desc = "Show hover help" },
@@ -280,6 +278,11 @@ require("conform").setup({
 			end
 		end,
 	},
+	formatters = {
+		yamlfmt = {
+			args = { "-in", "-formatter", "include_document_start=true" },
+		},
+	},
 	-- Set this to change the default values when calling conform.format()
 	-- This will also affect the default values for format_on_save/format_after_save
 	default_format_opts = {
@@ -298,6 +301,19 @@ require("conform").setup({
 	-- Conform will notify you when no formatters are available for the buffer
 	notify_no_formatters = true,
 })
+-- Add a Format command to format document or selection
+vim.api.nvim_create_user_command("Format", function(args)
+	local range = nil
+	if args.count ~= -1 then
+		local end_line = vim.api.nvim_buf_get_lines(0, args.line2 - 1, args.line2, true)[1]
+		range = {
+			start = { args.line1, 0 },
+
+			["end"] = { args.line2, end_line:len() },
+		}
+	end
+	require("conform").format({ async = true, lsp_format = "fallback", range = range })
+end, { range = true })
 
 vim.cmd([[
   augroup KeyboardLayout
