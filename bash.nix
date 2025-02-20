@@ -44,8 +44,8 @@
 
       # Enable pushd to autocomplete CDPATH entries
       complete -F _cd -o nospace pushd
-      bind '"\C-]": "pushd +1\n"'
-      bind '"\C-[": "pushd -0\n"'
+      bind '"\C-.": "pushd +1\n"'
+      bind '"\C-,": "pushd -0\n"'
     '';
   };
 }
