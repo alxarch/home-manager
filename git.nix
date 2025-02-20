@@ -1,5 +1,8 @@
-{ pkgs, ... }:
+{ pkgs, config, ... }:
 {
+  home.packages = with pkgs; [
+    difftastic
+  ];
 
   programs.git = {
     enable = true;
@@ -15,5 +18,14 @@
     difftastic.enable = true;
   };
   programs.lazygit.enable = true;
+  programs.lazygit.settings = {
+    git.paging.externalDiffCommand = "difft --color=always";
+  };
 
+  programs.jujutsu.enable = true;
+  programs.jujutsu.settings = {
+      user.email = config.programs.git.userEmail;
+      user.name = config.programs.git.userName;
+      ui.diff.tool = [ "difft" "--color=always" "$left" "$right" ];
+  };
 }
