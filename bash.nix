@@ -4,7 +4,7 @@
   programs.bash = {
     enable = true;
     enableCompletion = true;
-    enableVteIntegration = true;
+    # enableVteIntegration = true;
     historyControl = [ "ignorespace" "ignoredups" ];
     historyIgnore = [ "ls" "cd" "exit" ];
     shellAliases =
@@ -46,6 +46,12 @@
       complete -F _cd -o nospace pushd
       bind '"\C-.": "pushd +1\n"'
       bind '"\C-,": "pushd -0\n"'
+
+      if [[ $TERM != "dumb" ]]; then
+        eval "$(${config.home.profileDirectory}/bin/starship init bash --print-full-init)"
+        starship_precmd
+      fi
+
     '';
   };
 }
