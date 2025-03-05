@@ -38,20 +38,21 @@
       };
       pkgs = import nixpkgs {
         inherit system;
-        overlays = [ unstableOverlay ];
+        overlays = [ unstableOverlay nixgl.overlay wrapNixGLOverlay ];
         config.allowUnfree = true;
       };
     in
     {
-      homeConfigurations."alxarch@ubuntu" = home-manager.lib.homeManagerConfiguration {
+      homeConfigurations.alxarch = home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
         modules = [
           ./home.nix
           ./neovim.nix
           ./bash.nix
           ./git.nix
-          ./tmux.nix
+          # ./tmux.nix
           ./ssh.nix
+          # ./home-gui.nix
         ];
       };
       homeConfigurations."alxarch@wsl" = home-manager.lib.homeManagerConfiguration {

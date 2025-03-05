@@ -29,7 +29,7 @@
         "d" = "pushd";
         "D" = "popd";
       };
-    sessionVariables.CDPATH = "~/code:~";
+    sessionVariables.CDPATH = "~/Projects:~";
     initExtra = ''
       # enable vi editing
       set -o vi

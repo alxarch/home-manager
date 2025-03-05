@@ -4,10 +4,22 @@
     enable = true;
     package = with pkgs; wrapNixGL {
       name = "alacritty";
-      package = unstable.alacritty;
+      package = pkgs.alacritty;
     };
-    settings  = {
-
-    };
+    settings = with pkgs.lib; mkMerge [
+      {
+        selection.save_to_clipboard = true;
+        keyboard.bindngs = [
+          {
+            key = "F";
+            mods = "Super";
+            action = "ToggleFullscreen";
+          }
+        ];
+      }
+      (mkIf config.fonts.fontconfig.enable {
+      font.normal.family = "SauceCodePro Nerd Font";
+      })
+    ];
   };
 }
