@@ -25,6 +25,7 @@
       lazygit
       codespell
 
+      prettierd
       python3
       pyright
       python3Packages.python-lsp-server
