@@ -50,7 +50,7 @@
           ./neovim.nix
           ./bash.nix
           ./git.nix
-          # ./tmux.nix
+          ./tmux.nix
           ./ssh.nix
           # ./home-gui.nix
         ];

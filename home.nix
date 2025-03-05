@@ -114,19 +114,34 @@
     enableBashIntegration = true;
     nix-direnv.enable = true;
   };
+
   programs.starship = {
-    enable = false;
+    enable = true;
     enableBashIntegration = true;
   };
 
 
   programs.ripgrep.enable = true;
 
-  xdg.enable = true;
   targets.genericLinux.enable = true;
+  xdg.enable = true;
   xdg.configFile.alacritty = {
     source = ./config/alacritty;
     recursive = true;
   };
+
+  services.darkman.enable = true;
+  services.darkman.darkModeScripts.alacritty-theme = ''
+    if type -P "alacritty" &>/dev/null; then
+      alacritty msg config "$(cat ${config.xdg.configHome}/alacritty/themes/github_dark_high_contrast.toml)"
+    fi
+  '';
+  services.darkman.lightModeScripts.alacritty-theme = ''
+    if type -P "alacritty" &>/dev/null; then
+      alacritty msg config "$(cat ${config.xdg.configHome}/alacritty/themes/github_light_high_contrast.toml)"
+    fi
+  '';
+
+
 
 }
