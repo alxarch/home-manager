@@ -56,6 +56,8 @@
       plenary-nvim
       nvim-web-devicons
       telescope-nvim
+
+      lazygit-nvim
       # pkgs.unstable.vimPlugins.none-ls-nvim
       # pkgs.unstable.vimPlugins.vim-dadbod
       # pkgs.unstable.vimPlugins.vim-dadbod-ui
