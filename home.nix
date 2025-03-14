@@ -122,6 +122,13 @@
 
 
   programs.ripgrep.enable = true;
+  programs.taskwarrior.enable = true;
+  programs.taskwarrior.package = pkgs.unstable.taskwarrior3;
+  programs.taskwarrior.config = {
+    uda.paid.type = "numeric";
+    uda.paid.label = "Paid €";
+  };
+
 
   targets.genericLinux.enable = true;
   xdg.enable = true;
