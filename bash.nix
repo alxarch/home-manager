@@ -1,6 +1,8 @@
 { config, pkgs, ... }:
 {
   home.packages = [ pkgs.trash-cli ];
+  programs.oh-my-posh.enable = true;
+  programs.oh-my-posh.useTheme = "json";
   programs.bash = {
     enable = true;
     enableCompletion = true;
@@ -46,11 +48,6 @@
       complete -F _cd -o nospace pushd
       bind '"\C-.": "pushd +1\n"'
       bind '"\C-,": "pushd -0\n"'
-
-      if [[ $TERM != "dumb" ]]; then
-        eval "$(${config.home.profileDirectory}/bin/starship init bash --print-full-init)"
-        starship_precmd
-      fi
 
     '';
   };

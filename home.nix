@@ -115,11 +115,6 @@
     nix-direnv.enable = true;
   };
 
-  programs.starship = {
-    enable = true;
-    # enableBashIntegration = true;
-  };
-
 
   programs.ripgrep.enable = true;
   programs.taskwarrior.enable = true;
