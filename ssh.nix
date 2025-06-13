@@ -1,7 +1,7 @@
 { pkgs, ... }:
 {
   programs.ssh.enable = true;
-  programs.ssh.package = pkgs.openssh;
+  programs.ssh.package = pkgs.openssh_gssapi;
   programs.ssh.extraConfig = ''
     Host geant-dev
       HostName 13.49.67.240
