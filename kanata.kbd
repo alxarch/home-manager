@@ -1,0 +1,80 @@
+(defsrc
+    `    1   2   3   4   5   6   7   8   9   0   -   =   bspc
+    tab   q   w   e   r   t   y   u   i   o   p   [   ]   \
+    caps   a   s   d   f   g   h   j   k   l   ;   '   ret
+    lsft nubs z   x   c   v   b   n   m   ,   .   /   rsft
+    lctl     lmet lalt       spc          ralt prnt rctl
+)
+(deflayer qwerty
+    `    1   2   3   4   5   6   7   8   9   0   -   =   bspc
+    tab   q   w   e   r   t   y   u   i   o   p   [   ]   \
+    @esc   a   s   d   f   g   h   j   k   l   ;   '   ret
+    lsft nubs z   x   c   v   b   n   m   ,   .   /   rsft
+    lctl     lmet @ext       spc          @rsa @sym @sym
+)
+
+(deflayer colemak
+    `    1   2   3   4   5   6   7   8   9   0   -   =   bspc
+    tab   q   w   f   p   b   j   l   u   y   ;   [   ]   \
+    @esc   a   r   s   t   g   m   n   e   i   o   '   ret
+    @zft z    x   c   d   v   XX  k   h   ,   .   /   rsft
+    lctl     lmet @ext       spc          @rsa @sym @sym
+)
+(deflayer extend
+    @grv _   _   _   _   _   _   _   _   _   _   _   _   _
+    _     esc bck @fnd fwd ins pgup home up  end XX   XX   XX XX
+    _      @alt @met @sft @ctl @ral pgdn left down rght del XX   _
+    _    @red    @und @cut @cpy @pst XX  prnt bspc tab menu XX  _
+    _        _    _          _            ret  _    _
+)
+
+(deflayer symbols
+    @grv 1   2   3   4   5   6   7   8   9   0   -   =   bspc
+    _     @!  @@  @#  @$  @%  @^  @&  @*  @:  ;   XX  @+  _
+    _      @alt @met @sft @ctl @ral @<  @lp @{  [   -   @_  ret
+    _    XX   XX  XX  XX  XX  XX  @>  @rp @}  ]   _   _
+    _        _    _          _            ret  _    _
+)
+
+(defalias 
+  col (layer-switch colemak)
+  qwe (layer-switch qwerty)
+  grv (tap-dance 300 (@qwe @col lrld))
+  ext (layer-while-held extend)
+  sym (layer-while-held symbols)
+
+  esc (tap-dance 300 (esc caps nlk))
+  sft (one-shot 800 lsft)
+  zft (tap-hold 50 200 z lsft)
+  alt (one-shot 800 lalt)
+  ctl (one-shot 800 lctl)
+  met (one-shot 800 lmet)
+  ral (one-shot 800 ralt)
+
+  rsa (tap-hold 50 200 @ral rsft)
+  fnd (tap-dance 200 (C-f C-S-f))
+  cpy (tap-dance 200 (C-c C-S-c))
+  pst (tap-dance 200 (C-v C-S-v))
+  cut (tap-dance 200 (C-x C-S-x))
+  und C-z
+  red C-S-z
+
+  ! S-1
+  @ S-2
+  # S-3
+  $ S-4
+  % S-5
+  ^ S-6
+  & S-7
+  * S-8
+  lp S-9
+  rp S-0
+  _ S--
+  + S-+
+  : S-;
+  ? S-/
+  < S-,
+  > S-.
+  { S-[
+  } S-]
+)

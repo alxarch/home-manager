@@ -52,6 +52,7 @@
           ./git.nix
           ./tmux.nix
           ./ssh.nix
+          ./kanata.nix
           # ./home-gui.nix
         ];
       };
