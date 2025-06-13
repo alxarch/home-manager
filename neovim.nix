@@ -2,7 +2,7 @@
 {
   programs.neovim = {
     enable = true;
-    package = pkgs.unstable.neovim-unwrapped;
+    # package = pkgs.unstable.neovim-unwrapped;
     defaultEditor = true;
     extraPackages = with pkgs.unstable; [
       cargo
